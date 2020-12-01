@@ -1,13 +1,7 @@
 pipeline {
 	agent any
 	stages {	
-		
-		stage('Test') {
-			steps {
-                sh 'phpunit --log-junit logs/unitreport.xml -c tests/phpunit.xml tests'
-            }
-		}
-
+	
 		stage('Code Quality Check via SonarQube') {
 		steps {
 			script {
@@ -16,8 +10,8 @@ pipeline {
 					sh "${tool("SonarQube")}/bin/sonar-scanner \
 					-Dsonar.projectKey=ict3103 \
 					-Dsonar.sources=. \
-					-Dsonar.host.url=http://35.247.190.80:9000 \
-					-Dsonar.login=ba2e95e1007d142a697c3a71c6f79f9c9dd983dd"
+					-Dsonar.host.url=http://35.240.224.118:9000/ \
+					-Dsonar.login=cd636c6c1b2066d3348500ea6b8f1471a82f47a8"
 					}
 				}
 			}
@@ -31,7 +25,6 @@ pipeline {
 	}
 	post {
 		always{
-			junit testResults: 'logs/unitreport.xml'
 			recordIssues enabledForFailure: true, tools: [sonarQube()]
 			recordIssues(tools: [php()])
 		}
