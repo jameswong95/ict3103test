@@ -10,7 +10,7 @@ pipeline {
 					sh "${tool("SonarQube")}/bin/sonar-scanner \
 					-Dsonar.projectKey=ict3103 \
 					-Dsonar.sources=. \
-					-Dsonar.host.url=http://35.240.224.118:9000/ \
+					-Dsonar.host.url=http://35.240.224.118:9000 \
 					-Dsonar.login=cd636c6c1b2066d3348500ea6b8f1471a82f47a8"
 					}
 				}
@@ -27,6 +27,7 @@ pipeline {
 		always{
 			recordIssues enabledForFailure: true, tools: [sonarQube()]
 			recordIssues(tools: [php()])
+			
 		}
 		success {
 			dependencyCheckPublisher pattern: 'dependency-check-report.xml'
