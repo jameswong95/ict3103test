@@ -1,7 +1,11 @@
 pipeline {
 	agent any
 	stages {	
-	
+		stage('Test') {
+			steps {
+                sh 'phpunit --log-junit logs/unitreport.xml -c tests/phpunit.xml tests'
+            }
+		}
 		stage('Code Quality Check via SonarQube') {
 		steps {
 			script {
@@ -27,7 +31,7 @@ pipeline {
 		always{
 			recordIssues enabledForFailure: true, tools: [sonarQube()]
 			recordIssues(tools: [php()])
-			
+
 		}
 		success {
 			dependencyCheckPublisher pattern: 'dependency-check-report.xml'
